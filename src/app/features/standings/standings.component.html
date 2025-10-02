@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex flex-col items-center py-12 px-4">
+      <div
+        class="w-full max-w-4xl bg-gray-900/80 backdrop-blur-lg border border-yellow-600/40 shadow-2xl rounded-2xl p-8 animate-fade-in"
+      >
+        <h2 class="text-3xl font-extrabold text-yellow-500 mb-6 text-center tracking-wide">
+          🏆 Tabla de Posiciones
+        </h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-800 text-gray-300 text-sm uppercase">
+                <th class="px-4 py-3">#</th>
+                <th class="px-4 py-3">Jugador</th>
+                <th class="px-4 py-3">Apodo</th>
+                <th class="px-4 py-3">Puntos</th>
+                <th class="px-4 py-3">GF</th>
+                <th class="px-4 py-3">GC</th>
+                <th class="px-4 py-3">DG</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let row of standings(); let i = index"
+                class="border-b border-gray-700 hover:bg-gray-800/60 transition"
+              >
+                <td class="px-4 py-3 text-gray-400">{{ i + 1 }}</td>
+                <td class="px-4 py-3 font-semibold text-gray-100">{{ row.display_name }}</td>
+                <td class="px-4 py-3 text-gray-400">{{ row.nickname || '-' }}</td>
+                <td class="px-4 py-3 font-bold text-yellow-500">{{ row.pts }}</td>
+                <td class="px-4 py-3 text-gray-300">{{ row.gf }}</td>
+                <td class="px-4 py-3 text-gray-300">{{ row.ga }}</td>
+                <td class="px-4 py-3 text-gray-100">
+                  <span
+                    [ngClass]="{
+                      'text-green-400': row.gf - row.ga > 0,
+                      'text-red-400': row.gf - row.ga < 0,
+                      'text-gray-300': row.gf - row.ga === 0
+                    }"
+                  >
+                    {{ row.gf - row.ga }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>

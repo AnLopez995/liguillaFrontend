@@ -1,0 +1,122 @@
+<div
+  *ngIf="selectedMatch()"
+  class="fixed inset-0 bg-black/60 flex justify-center items-center z-50 animate-fade-in"
+>
+  <div class="bg-gray-900 border border-yellow-600/40 p-6 rounded-xl shadow-xl w-[28rem]">
+    <h3 class="text-xl font-bold text-yellow-500 mb-4 text-center">Reportar Resultado</h3>
+
+    <form (ngSubmit)="reportMatch()" class="space-y-4">
+      <!-- Goles -->
+      <div>
+        <label class="text-gray-300">{{ selectedMatch()?.local_name }}</label>
+        <input
+          type="number"
+          [(ngModel)]="localGoals"
+          name="localGoals"
+          class="w-full mt-1 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 px-3 py-2 focus:ring-2 focus:ring-yellow-500"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="text-gray-300">{{ selectedMatch()?.away_name }}</label>
+        <input
+          type="number"
+          [(ngModel)]="awayGoals"
+          name="awayGoals"
+          class="w-full mt-1 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 px-3 py-2 focus:ring-2 focus:ring-yellow-500"
+          required
+        />
+      </div>
+
+      <!-- Eventos -->
+      <div>
+        <h4 class="text-yellow-400 font-semibold mb-2">Eventos</h4>
+        <div class="flex gap-2 mb-3">
+          <select
+            #competitor
+            class="flex-1 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 px-2 py-1"
+          >
+            <option [value]="selectedMatch()?.local_name">
+              {{ selectedMatch()?.local_name }}
+            </option>
+            <option [value]="selectedMatch()?.away_name">
+              {{ selectedMatch()?.away_name }}
+            </option>
+          </select>
+
+          <select
+            #eventType
+            class="flex-1 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 px-2 py-1"
+          >
+            <option value="GOAL">⚽ Gol</option>
+            <option value="YELLOW">🟨 Amarilla</option>
+            <option value="RED">🟥 Roja</option>
+          </select>
+
+          <input
+            type="number"
+            #minute
+            placeholder="Min"
+            class="w-16 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 px-2 py-1"
+          />
+
+          <button
+            type="button"
+            (click)="
+              addEvent(selectCompetitorId(competitor.value), eventType.value, minute.valueAsNumber)
+            "
+            class="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded-lg transition"
+          >
+            +
+          </button>
+        </div>
+
+        <!-- Lista de eventos -->
+        <ul class="space-y-2 max-h-32 overflow-y-auto">
+          <li
+            *ngFor="let ev of events; let i = index"
+            class="flex justify-between items-center bg-gray-800 px-3 py-2 rounded-lg"
+          >
+            <span class="text-gray-200 text-sm">
+              {{ ev.minute }}' -
+              <span
+                [ngClass]="{
+                  'text-green-400': ev.type === 'GOAL',
+                  'text-yellow-400': ev.type === 'YELLOW',
+                  'text-red-400': ev.type === 'RED'
+                }"
+              >
+                {{ ev.type }}
+              </span>
+            </span>
+            <button
+              type="button"
+              (click)="removeEvent(i)"
+              class="text-red-400 hover:text-red-600 transition"
+            >
+              ✖
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex gap-3 mt-6">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 rounded-lg transition"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-3 py-2 rounded-lg transition"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
